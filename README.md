@@ -1,5 +1,6 @@
 # solid-auth-cli
 **a node/command-line Solid client with persistent login**
+<a href="http://badge.fury.io/js/solid-auth-cli">![npm](https://badge.fury.io/js/solid-auth-cli.svg)</a>
 
 This library provides the same API and abilities as solid-auth-client
 but works in a browserless nodejs context. 
