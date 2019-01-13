@@ -12,8 +12,7 @@ if( typeof(window) === "undefined") solid = { auth:require('../src') }
    For browser version: 
        open test.html
    For command line:
-       create a solid-credentials file (see README)
-       then run node test
+       run node test
 */
 const idp      = "https://solid.community"
 const resource = "https://jeffz.solid.community/public/private/hidden.html"
