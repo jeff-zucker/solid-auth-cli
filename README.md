@@ -9,6 +9,6 @@ but works in a browserless nodejs context.
 ## login( path-to-credentials-json-file )
 ## login({ idp:"https://idp.example.com", username:"you", password:"hmm" })
 
-The login method needs an Identity Provider, username, and password.  Those may be passed in as an object or read from a specified JSON file.  If called with no arguments, login() will look for a credentials file in ~/.solid-credentials.json.  
+The login method needs an Identity Provider, username, and password.  Those may be passed in as an object or read from a specified JSON file.  If called with no arguments, login() will look for a credentials file in ~/.solid-auth-cli-config.json.  
 
 &copy; Jeff Zucker, 2019, may be freely distributed using an MIT license
