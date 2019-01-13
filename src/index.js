@@ -67,7 +67,7 @@ const client = new SolidClient({ identityManager : new IdentityManager() });
     })
 }
 /*cjs*/ function getCredentials(fn){
-        fn = fn || path.join(process.env.HOME,".solid-credentials.json")
+        fn = fn || path.join(process.env.HOME,".solid-auth-cli-config.json")
         fn = (fs.existsSync(fn))  
            ? fn 
            : path.join(__dirname,"solid-credentials.json")
