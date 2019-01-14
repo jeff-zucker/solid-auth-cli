@@ -5,6 +5,7 @@
   "author": "Jeff Zucker",
   "license": "MIT",
   "dependencies": {
-    "@solid/cli": "^0.1.0"
+    "@solid/cli": "^0.1.0",
+    "readline-sync": "^1.4.9"
   }
 }

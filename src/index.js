@@ -53,20 +53,16 @@ const client = new SolidClient({ identityManager : new IdentityManager() });
     if (session && !client.isExpired(session))
         return(session)
 }
-/*cjs*/ function login( cfg ) {
-    return new Promise((resolve, reject)=>{
+/*cjs*/ async function login( cfg ) {
         if( typeof cfg==="string" ) cfg=undefined // s-a-client compatability 
-        cfg = cfg || getCredentials();
-        client.login(
+        cfg = cfg || await getCredentials()
+        session = await client.login(
             cfg.idp,{username:cfg.username,password:cfg.password}
-        ).then( sess => {
-            sess.webId = sess.idClaims.sub
-            session = sess
-            resolve(session);
-        }, e => {reject("Couldn't login "+e)} )
-    })
+        )
+        session.webId = session.idClaims.sub
+        return(session);
 }
-/*cjs*/ function getCredentials(fn){
+/*cjs*/ async function getCredentials(fn){
         fn = fn || path.join(process.env.HOME,".solid-auth-cli-config.json")
         fn = (fs.existsSync(fn))  
            ? fn 
@@ -79,5 +75,15 @@ const client = new SolidClient({ identityManager : new IdentityManager() });
             creds = JSON.parse( creds );
             if(!creds) throw new Error("JSON parse error : "+err)
         } catch(err) { throw new Error("JSON parse error : "+err) }
+        if(!creds.password){
+            creds.password = await promptForPass() 
+        }
         return(creds)
+}
+
+function promptForPass() {
+    const readlineSync = require('readline-sync');
+    return new Promise(function(resolve, reject) {
+        resolve( readlineSync.question("password? ",{hideEchoBack: true}))
+    });
 }
