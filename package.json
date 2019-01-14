@@ -1,6 +1,6 @@
 {
   "name": "solid-auth-cli",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "main": "src/index.js",
   "author": "Jeff Zucker",
   "license": "MIT",
