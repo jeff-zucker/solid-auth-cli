@@ -31,7 +31,7 @@ login(idp).then( session => {
 },e => console.log("Error logging in : "+e))
 
 async function login(idp) {
-    var session = await solid.auth.currentSession()
-    if (!session) session = await solid.auth.login(idp)
-    return session;
+    session = await solid.auth.login(idp)
+    if(session) return(session)
+    else throw new Error()
 }

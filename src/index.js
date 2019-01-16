@@ -52,6 +52,7 @@ const client = new SolidClient({ identityManager : new IdentityManager() });
 /*cjs*/ async function currentSession(){
     if (session && !client.isExpired(session))
         return(session)
+    else { throw new Error("No session!") }
 }
 /*cjs*/ async function login( cfg ) {
         if( typeof cfg==="string" ) cfg=undefined // s-a-client compatability 
@@ -59,8 +60,11 @@ const client = new SolidClient({ identityManager : new IdentityManager() });
         session = await client.login(
             cfg.idp,{username:cfg.username,password:cfg.password}
         )
-        session.webId = session.idClaims.sub
-        return(session);
+        if(session) {
+            session.webId = session.idClaims.sub
+            return(session);
+        }
+        else { throw new Error("could not log in") }
 }
 /*cjs*/ async function getCredentials(fn){
         fn = fn || path.join(process.env.HOME,".solid-auth-cli-config.json")
