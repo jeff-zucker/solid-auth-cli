@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 const solid   = { auth:require('../src') }
-const $rdf    = require('./rdflib-modified') // MODIFIED VERSION
+const $rdf    = require('rdflib')
 const kb      = $rdf.graph()                 
+const fetcher = $rdf.fetcher(kb,{fetch:solid.auth.fetch})
 /*
     a command-line script using rdflib to fetch and parse 
     a file requiring login
@@ -9,23 +10,15 @@ const kb      = $rdf.graph()
     CHANGE THESE TO BE A TURTLE FILE REQUIRING LOGIN
     AND A PREDICATE/OBJECT PAIR YOU EXPECT TO TO FIND THERE
 */
-var file = kb.sym("https://jeffz.solid.community/private/hidden.ttl")
+var file = "https://jeffz.solid.community/private/hidden.ttl"
 var expected_predicate = kb.sym("https://schema.org/name")
 var expected_object    = kb.literal("foo")
 
-/*  CHANGE THESE 
-*/
-var credentials = {
-   idp : "YOUR IDP",
-   username: "YOUR USERNAME",
-   password: "YOUR PASSWORD",
-}
-
 console.log("logging in ...")
-solid.auth.login(credentials).then( session => {
+solid.auth.login().then( session => {
     console.log(`logged in as <${session.webId}>`)
-    $rdf.fetcher(kb).load(file).then(function(response) {
-        var ok = kb.each(file,expected_predicate,expected_object)
+    fetcher.load(file).then(function(response) {
+        var ok = kb.each(kb.sym(file),expected_predicate,expected_object)
         if(ok.length) console.log("ok");
         else console.log("fail : got something but not the right thing.")
     },e => console.log("Error fetching : "+e))

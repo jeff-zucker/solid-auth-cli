@@ -1,3 +1,4 @@
+console.log("MODIFIED RDF!!!")
 var $rdf = {
   BlankNode: require('./blank-node'),
   Collection: require('./collection'),

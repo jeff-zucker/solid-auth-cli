@@ -17,6 +17,7 @@ const SolidClient     = require('@solid/cli/src/SolidClient');
 const IdentityManager =require('@solid/cli/src/IdentityManager');
 const fs = require('fs');
 const path = require('path');
+exports.name = "cli";
 exports.fetch = fetch;
 exports.currentSession = currentSession;
 exports.login = login;
@@ -28,9 +29,6 @@ var session;
 const idMan = new IdentityManager()
 const client = new SolidClient({ identityManager : new IdentityManager() });
 
-/*  TBD: make fetch a two-step request like solid-auth-client
- *  check if authorization needed and only send token if it its
- */
 /*cjs*/ async function fetch(url,request){
     request = request || {};
     request.method = request.method || 'GET';
