@@ -66,26 +66,31 @@ const client = new SolidClient({ identityManager : new IdentityManager() });
 }
 /*cjs*/ async function getCredentials(fn){
         fn = fn || path.join(process.env.HOME,".solid-auth-cli-config.json")
-        fn = (fs.existsSync(fn))  
-           ? fn 
-           : path.join(__dirname,"solid-credentials.json")
-        var creds;
-        try {
-            creds = fs.readFileSync(fn,'utf8');
-        } catch(err) { throw new Error("read file error "+err) }
-        try {
-            creds = JSON.parse( creds );
-            if(!creds) throw new Error("JSON parse error : "+err)
-        } catch(err) { throw new Error("JSON parse error : "+err) }
+        var creds={};
+        if(fs.existsSync(fn))  {
+            try {
+                creds = fs.readFileSync(fn,'utf8');
+            } catch(err) { throw new Error("read file error "+err) }
+            try {
+                creds = JSON.parse( creds );
+                if(!creds) throw new Error("JSON parse error : "+err)
+            } catch(err) { throw new Error("JSON parse error : "+err) }
+        }
+        if(!creds.idp){
+            creds.idp = await prompt("IDP") 
+        }
+        if(!creds.username){
+            creds.username = await prompt("Username") 
+        }
         if(!creds.password){
-            creds.password = await promptForPass() 
+            creds.password = await prompt("Password") 
         }
         return(creds)
 }
-
-function promptForPass() {
+function prompt(question) {
+    const hide = (question.match(/password/i) ) ? true : false
     const readlineSync = require('readline-sync');
     return new Promise(function(resolve, reject) {
-        resolve( readlineSync.question("password? ",{hideEchoBack: true}))
+        resolve( readlineSync.question(question+"? ",{hideEchoBack: hide}))
     });
 }
