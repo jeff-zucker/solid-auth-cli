@@ -6,6 +6,7 @@
 "use strict";
 
 // import * as ifetch          from 'isomorphic-fetch';
+// import * as filefetch       from 'file-fetch';
 // import * as SolidClient     from '@solid/cli/src/SolidClient';
 // import * as IdentityManager from '@solid/cli/src/IdentityManager';
 // import * as fs              from 'fs';
@@ -13,6 +14,7 @@
 
 // cjs-start
 const ifetch          = require('isomorphic-fetch');
+const filefetch       = require('file-fetch');
 const SolidClient     = require('@solid/cli/src/SolidClient');
 const IdentityManager =require('@solid/cli/src/IdentityManager');
 const fs = require('fs');
@@ -30,6 +32,9 @@ const idMan = new IdentityManager()
 const client = new SolidClient({ identityManager : new IdentityManager() });
 
 /*cjs*/ async function fetch(url,request){
+    if( url.match(/^file:/) ){
+        return await filefetch(url,request)        
+    }
     request = request || {};
     request.method = request.method || 'GET';
     request.headers = request.headers || {};
