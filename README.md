@@ -15,7 +15,7 @@ You must be using Version 0.19.1 or later of rdflib.js to use it in conjunction 
   const fetcher = $rdf.fetcher( store, {fetch:auth.fetch} );
   auth.login().then( session => {
       fetcher.load( ... ).then( response => {
-          // ...
+          // ... any rdflib methods
       }, console.log() )
   }, console.log() )
   ```  
@@ -28,7 +28,8 @@ Solid-auth-cli is built on top of solid-cli, providing persistance and the same 
   if(typeof window === "undefined"){
       solid = { auth:require('solid-auth-cli') }
   }
-  solid.auth.login()... // this will now use solid-auth-client in the browser and solid-auth-cli in node
+  solid.auth.login()... // this will now use solid-auth-client in the browser
+                        // and solid-auth-cli in node
 
 
 
@@ -36,7 +37,7 @@ Solid-auth-cli is built on top of solid-cli, providing persistance and the same 
 ### login( path-to-credentials-json-file )
 ### login({ idp:"https://idp.example.com", username:"you", password:"hmm" })
 
-The login method needs an Identity Provider, username, and password.  Those may be passed in as an object or read from a specified JSON file.  If called with no arguments, login() will look for a configuration file in ~/.solid-auth-cli-config.json. If there is no configuration file or it is missing an IDP, username, or password, you will be prompted to enter them when you login.
+The login method needs an Identity Provider, username, and password.  Those may be passed in as an object or read from a specified JSON file.  If called with no arguments, login() will look for a configuration file in ~/.solid-auth-cli-config.json and, if it does not find it will look for the environment SOLID_IDP, SOLID_USERNAME, and SOLID_PASSWORD.
 
 
 ### An example

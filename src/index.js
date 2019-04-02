@@ -33,6 +33,9 @@ const client = new SolidClient({ identityManager : new IdentityManager() });
 
 /*cjs*/ async function fetch(url,request){
     if( url.match(/^file:/) ){
+        /* More robust support for file:// scheme is coming soon
+           including support for all rdflib fetcher methods
+        */
         return await filefetch(url,request)        
     }
     request = request || {};
@@ -60,6 +63,9 @@ const client = new SolidClient({ identityManager : new IdentityManager() });
 /*cjs*/ async function login( cfg ) {
         if( typeof cfg==="string" ) cfg=undefined // s-a-client compatability 
         cfg = cfg || await getCredentials()
+        if(typeof cfg.password === "undefined"){
+            throw new Error("Couldn't find login config, please specify environment variables SOLID_IDP, SOLID_USERNAME, and SOLID_PASSWORD or see the README for solid-auth-cli for other login options.");
+        }
         session = await client.login(
             cfg.idp,{username:cfg.username,password:cfg.password}
         )
@@ -81,21 +87,12 @@ const client = new SolidClient({ identityManager : new IdentityManager() });
                 if(!creds) throw new Error("JSON parse error : "+err)
             } catch(err) { throw new Error("JSON parse error : "+err) }
         }
-        if(!creds.idp){
-            creds.idp = await prompt("IDP") 
-        }
-        if(!creds.username){
-            creds.username = await prompt("Username") 
-        }
-        if(!creds.password){
-            creds.password = await prompt("Password") 
+        else {
+            creds = {
+                idp      : process.env.SOLID_IDP,
+                username : process.env.SOLID_USERNAME,
+                password : process.env.SOLID_PASSWORD
+            } 
         }
         return(creds)
-}
-function prompt(question) {
-    const hide = (question.match(/password/i) ) ? true : false
-    const readlineSync = require('readline-sync');
-    return new Promise(function(resolve, reject) {
-        resolve( readlineSync.question(question+"? ",{hideEchoBack: hide}))
-    });
 }
