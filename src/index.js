@@ -6,7 +6,7 @@
 "use strict";
 
 // import * as ifetch          from 'isomorphic-fetch';
-// import * as filefetch       from 'file-fetch';
+// import * as filefetch       from 'solid-fetch';
 // import * as SolidClient     from '@solid/cli/src/SolidClient';
 // import * as IdentityManager from '@solid/cli/src/IdentityManager';
 // import * as fs              from 'fs';
@@ -14,7 +14,7 @@
 
 // cjs-start
 const ifetch          = require('isomorphic-fetch');
-const filefetch       = require('file-fetch');
+const filefetch       = require('solid-rest-file');
 const SolidClient     = require('@solid/cli/src/SolidClient');
 const IdentityManager =require('@solid/cli/src/IdentityManager');
 const fs = require('fs');
@@ -58,7 +58,7 @@ const client = new SolidClient({ identityManager : new IdentityManager() });
 /*cjs*/ async function currentSession(){
     if (session && !client.isExpired(session))
         return(session)
-    else { throw new Error("No session!") }
+    else { return null; }
 }
 /*cjs*/ async function login( cfg ) {
         if( typeof cfg==="string" ) cfg=undefined // s-a-client compatability 

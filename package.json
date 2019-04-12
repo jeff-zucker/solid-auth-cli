@@ -1,19 +1,23 @@
 {
   "name": "solid-auth-cli",
-  "version": "0.1.13",
+  "version": "0.2.0",
   "main": "src/index.js",
   "author": "Jeff Zucker",
   "license": "MIT",
+  "scripts": {
+    "test": "jest"
+  },
   "dependencies": {
     "@solid/cli": "^0.1.0",
     "async": "^2.6.1",
     "file-fetch": "^1.1.1",
-    "fs": "0.0.1-security",
     "isomorphic-fetch": "^2.2.1",
     "jsonld": "^1.4.0",
-    "n3": "^1.0.3"
+    "n3": "^1.0.3",
+    "solid-rest-file": "0.0.1"
   },
   "devDependencies": {
-    "rdflib": "^0.19.1"
+    "jest": "^24.7.1",
+    "rdflib": "^0.20.0"
   }
 }
