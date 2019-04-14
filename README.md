@@ -1,7 +1,7 @@
 # solid-auth-cli
 **a node/command-line Solid client with persistent login**
 <p>
-[![NPM](https://nodei.co/npm/solid-auth-cli.png)](https://nodei.co/npm/solid-auth-cli/)
+  [![NPM](https://nodei.co/npm/solid-auth-cli.png)](https://nodei.co/npm/solid-auth-cli/)
 </p>
 
 This library supports login and persistent connection to Solid from command-line and node apps. It (and apps using it) can make authorized fetches either directly using the fetch and REST APIs, or using rdflib's fetcher.
