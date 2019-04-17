@@ -6,7 +6,7 @@
 "use strict";
 
 // import * as ifetch          from 'isomorphic-fetch';
-// import * as filefetch       from 'solid-fetch';
+// import * as filefetch       from 'solid-rest-file';
 // import * as SolidClient     from '@solid/cli/src/SolidClient';
 // import * as IdentityManager from '@solid/cli/src/IdentityManager';
 // import * as fs              from 'fs';
