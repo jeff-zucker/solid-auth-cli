@@ -32,10 +32,7 @@ const idMan = new IdentityManager()
 const client = new SolidClient({ identityManager : new IdentityManager() });
 
 /*cjs*/ async function fetch(url,request){
-    if( url.match(/^file:/) ){
-        /* More robust support for file:// scheme is coming soon
-           including support for all rdflib fetcher methods
-        */
+    if( url.match(/^(file:|app:)/) ){
         return await filefetch(url,request)        
     }
     request = request || {};
