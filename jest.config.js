@@ -2,8 +2,28 @@
 // https://jestjs.io/docs/en/configuration.html
 
 module.exports = {
+
+// added by Jeff
+  testEnvironment: "node",
+  collectCoverageFrom: ["src/**/*.js"],
+
+  // An array of regexp pattern strings used to skip coverage collection
+  // coveragePathIgnorePatterns: [
+  //   "/node_modules/"
+  // ],
+
+// added by Otto
+//  globalSetup: "./tests/setup.js",
+
+// not used
+
   // All imported modules in your tests should be mocked automatically
   // automock: false,
+
+  // An array of regexp pattern strings that are matched against all test paths, matched tests are skipped
+  // testPathIgnorePatterns: [
+  //   "/node_modules/"
+  // ],
 
   // Stop running tests after `n` failures
   // bail: 0,
@@ -25,11 +45,6 @@ module.exports = {
 
   // The directory where Jest should output its coverage files
   // coverageDirectory: null,
-
-  // An array of regexp pattern strings used to skip coverage collection
-  // coveragePathIgnorePatterns: [
-  //   "/node_modules/"
-  // ],
 
   // A list of reporter names that Jest uses when writing coverage reports
   // coverageReporters: [
@@ -128,9 +143,6 @@ module.exports = {
   // A list of paths to snapshot serializer modules Jest should use for snapshot testing
   // snapshotSerializers: [],
 
-  // The test environment that will be used for testing
-  testEnvironment: "node",
-
   // Options that will be passed to the testEnvironment
   // testEnvironmentOptions: {},
 
@@ -141,11 +153,6 @@ module.exports = {
   // testMatch: [
   //   "**/__tests__/**/*.[jt]s?(x)",
   //   "**/?(*.)+(spec|test).[tj]s?(x)"
-  // ],
-
-  // An array of regexp pattern strings that are matched against all test paths, matched tests are skipped
-  // testPathIgnorePatterns: [
-  //   "/node_modules/"
   // ],
 
   // The regexp pattern or array of patterns that Jest uses to detect test files

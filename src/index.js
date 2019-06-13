@@ -5,16 +5,18 @@
 
 "use strict";
 
-// import * as ifetch          from 'isomorphic-fetch';
-// import * as filefetch       from 'solid-rest-file';
-// import * as SolidClient     from '@solid/cli/src/SolidClient';
-// import * as IdentityManager from '@solid/cli/src/IdentityManager';
-// import * as fs              from 'fs';
-// import * as path            from 'path';
+let Rest = require('solid-rest/src/rest.js');
+var rest 
+function setRestHandlers(handlers){
+  if(typeof handlers !="undefined"){ rest = new Rest ( handlers ); return }
+  if(typeof rest==="undefined") {
+    let File = require('solid-rest/src/file.js');
+    let Mem = require('solid-rest/src/localStorage.js');
+    rest = new Rest ([ new File, new Mem ])
+  }
+}
 
-// cjs-start
 const ifetch          = require('isomorphic-fetch');
-const filefetch       = require('solid-rest-file');
 const SolidClient     = require('@solid/cli/src/SolidClient');
 const IdentityManager =require('@solid/cli/src/IdentityManager');
 const fs = require('fs');
@@ -33,7 +35,8 @@ const client = new SolidClient({ identityManager : new IdentityManager() });
 
 /*cjs*/ async function fetch(url,request){
     if( url.match(/^(file:|app:)/) ){
-        return await filefetch(url,request)        
+        setRestHandlers()
+        return await rest.fetch(url,request)        
     }
     request = request || {};
     request.method = request.method || 'GET';
