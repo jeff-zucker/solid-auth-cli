@@ -1,6 +1,6 @@
 {
   "name": "solid-auth-cli",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "main": "src/index.js",
   "author": "Jeff Zucker",
   "license": "MIT",
@@ -13,7 +13,7 @@
     "isomorphic-fetch": "^2.2.1",
     "jsonld": "^1.4.0",
     "n3": "^1.0.3",
-    "solid-rest": "^1.0.1"
+    "solid-rest": "^1.0.2"
   },
   "devDependencies": {
     "jest": "^24.7.1",
