@@ -16,7 +16,6 @@
     "solid-rest": "^1.0.2"
   },
   "devDependencies": {
-    "jest": "^24.7.1",
     "rdflib": "^0.20.1"
   }
 }
