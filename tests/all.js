@@ -101,13 +101,17 @@ async function run(scheme){
   ok("200 head",res.status==200 && res.headers.get("allow") )
 
   res = await HEAD( cfg.missingFolder )
-  ok("404 head on missing resource",res.status==404 )
+  ok("404 head resource, not found",res.status==404 )
 
   res = await GET( cfg.missingFolder )
-  ok("404 get of missing container",res.status==404 )
+  ok("404 get container, not found",res.status==404 )
 
   res = await GET( cfg.file1 )
-  ok("200 get of resource",res.status==200 )
+  ok("200 get resource",res.status==200 && await res.text()===cfg.text)
+
+  res = await GET( cfg.folder1 )
+  let type = res.headers.get("content-type")
+  ok("200 get container",res.status==200 && type==="text/turtle")
 
   res = await DELETE( cfg.folder1 )
   ok("409 delete container, not empty",res.status==409)
