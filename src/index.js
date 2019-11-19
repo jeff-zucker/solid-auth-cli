@@ -16,7 +16,7 @@ function setRestHandlers(handlers){
   }
 }
 
-const ifetch          = require('isomorphic-fetch');
+const crossFetch          = require('cross-fetch');
 const SolidClient     = require('@solid/cli/src/SolidClient');
 const IdentityManager =require('@solid/cli/src/IdentityManager');
 const fs = require('fs');
@@ -46,7 +46,7 @@ const client = new SolidClient({ identityManager : new IdentityManager() });
          request.credentials = "include";
          request.headers.authorization= `Bearer ${token}`;
     }
-    return await ifetch(url,request);
+    return crossFetch(url,request);
 }
 /* 
  *  RATHER MINIMAL, BUT FOR NOW THEY"LL DO
