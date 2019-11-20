@@ -55,75 +55,81 @@ async function getConfig(scheme){
 
 async function run(scheme){
 
+
   [tests,fails,passes] = [0,0,0]
   let cfg = await getConfig(scheme)
+  let res
 
-  if(scheme==="app:") await postFolder("app://ls/","test-folder")
+  /* CREATE TEST FOLDER ON APP */
+  if(scheme==="app:") {
+    res = await postFolder("app://ls/","test-folder")
+    cfg.base += "/";
+  }
 
   console.log(`\nTesting ${cfg.base} ...`)
 
   res = await postFolder( cfg.base,cfg.c1name )
-  ok( "400 post container with trailing slash on slug", res.status==400)
+  ok( "400 post container with trailing slash on slug", res.status==400,res)
 
   cfg.c1name = cfg.c1name.replace(/\/$/,'')
 
   res = await postFolder( cfg.base,cfg.c1name )
-  ok( "201 post container", res.status==201)
+  ok( "201 post container", res.status==201,res)
 
   res = await postFolder( cfg.base,cfg.c1name )
-  ok( "201 post container, container found", res.status==201)
+  ok( "201 post container, container found", res.status==201,res)
 
   res = await postFolder( cfg.missingFolder,cfg.c2name )
-  ok( "404 post container, parent not found", res.status==404)
+  ok( "404 post container, parent not found", res.status==404,res)
 
   res = await postFile( cfg.folder1,cfg.r1name,cfg.text )
-  ok( "201 post resource", res.status==201)
+  ok( "201 post resource", res.status==201,res)
 
   res = await postFile( cfg.folder1,cfg.r1name,cfg.txt )
-  ok( "201 post resource, resource found", res.status==201)
+  ok( "201 post resource, resource found", res.status==201,res)
 
   res = await postFile( cfg.missingFolder,cfg.file2 )
-  ok( "404 post resource, parent not found", res.status==404)
+  ok( "404 post resource, parent not found", res.status==404,res)
 
   res = await PUT( cfg.folder1 )
-  ok( "409 put container (method not allowed)", res.status==409)
+  ok( "409 put container (method not allowed)", res.status==409,res)
 
   res = await PUT( cfg.file1,cfg.text )
-  ok( "201 put resource", res.status==201)
+  ok( "201 put resource", res.status==201,res)
 
   res = await PUT( cfg.file1,cfg.text )
-  ok( "201 put resource, resource found", res.status==201)
+  ok( "201 put resource, resource found", res.status==201,res)
 
   res = await PUT( cfg.deepR,cfg.text )
   ok("201 put resource, parent not found (recursive creation)",res.status==201)
 
   res = await HEAD( cfg.deepR )
-  ok("200 head",res.status==200 && res.headers.get("allow") )
+  ok("200 head",res.status==200 && res.headers.get("allow"),res )
 
   res = await HEAD( cfg.missingFolder )
-  ok("404 head resource, not found",res.status==404 )
+  ok("404 head resource, not found",res.status==404,res )
 
   res = await GET( cfg.missingFolder )
-  ok("404 get container, not found",res.status==404 )
+  ok("404 get container, not found",res.status==404,res )
 
   res = await GET( cfg.file1 )
   ok("200 get resource",res.status==200 && await res.text()===cfg.text)
 
   res = await GET( cfg.folder1 )
   let type = res.headers.get("content-type")
-  ok("200 get container",res.status==200 && type==="text/turtle")
+  ok("200 get container",res.status==200 && type==="text/turtle",res)
 
   res = await DELETE( cfg.folder1 )
-  ok("409 delete container, not empty",res.status==409)
+  ok("409 delete container, not empty",res.status==409,res)
 
   res = await DELETE( cfg.file1 )
   res = await DELETE( cfg.deepR )
-  ok("200 delete resource",res.status==200)
+  ok("200 delete resource",res.status==200,res)
 
   if(scheme != "https:"){
     res = await DELETE( cfg.folder2 )
     res = await DELETE( cfg.folder1 )
-    ok("200 delete container",res.status==200)
+    ok("200 delete container",res.status==200,res)
   }
 
   console.log(`${passes}/${tests} tests passed, ${fails} failed\n`)
@@ -139,7 +145,7 @@ async function HEAD(url){
   return await fetch( url, {method:"HEAD"} )
 }
 async function PUT(url,text){
-  return await fetch( url, {method:"PUT",body:text} )
+  return await fetch( url, {method:"PUT",body:text,headers:{"content-type":"text/turtle"}} )
 }
 async function DELETE(url){
   return await fetch( url, {method:"DELETE"} )
@@ -147,7 +153,7 @@ async function DELETE(url){
 async function POST(parent,item,content,link){
   return await fetch( parent,{
     method:"POST",
-    headers:{slug:item,link:link},
+    headers:{slug:item,link:link,"content-type":"text/turtle"},
     body:content
   })
 }
@@ -162,12 +168,13 @@ async function postFolder(parent,folder){
 
 /* ============================================== */
 
-function ok( label, success ){
+function ok( label, success,res ){
    tests = tests + 1;   
    if(success) passes = passes + 1
    else fails = fails+1
    let msg = success ? "ok " : "FAIL "
    console.log( "  " + msg + label)
+   if(!success && res ) console.log(res.status,res.statusText)
    return success
 }
 

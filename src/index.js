@@ -35,7 +35,7 @@ const client = new SolidClient({ identityManager : new IdentityManager() });
 
 /*cjs*/ async function fetch(url,request){
     if( url.match(/^(file:|app:)/) ){
-        setRestHandlers()
+        if(typeof(rest)==="undefined") setRestHandlers()
         return await rest.fetch(url,request)        
     }
     request = request || {};
