@@ -31,7 +31,7 @@ exports.getCredentials = getCredentials;
 
 var session;
 const idMan = new IdentityManager()
-const client = new SolidClient({ identityManager : new IdentityManager() });
+const client = new SolidClient({ identityManager : idMan });
 
 /*cjs*/ async function fetch(url,request){
     if( url.match(/^(file:|app:)/) ){
