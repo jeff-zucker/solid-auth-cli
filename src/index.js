@@ -30,7 +30,6 @@ exports.getCredentials = getCredentials;
 // cjs-end
 
 var session;
-const idMan = new IdentityManager()
 const client = new SolidClient({ identityManager : new IdentityManager() });
 
 /*cjs*/ async function fetch(url,request){
