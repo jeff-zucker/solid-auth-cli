@@ -78,7 +78,7 @@ async function getCredentials(fn){
 }
 
 var session;
-const settingsFile = path.join(process.env.HOME, '.solid-cli.json');
+const settingsFile = path.join(process.env.HOME || "", '.solid-cli.json');
 const identityManager = loadIdentityManager(settingsFile);
 const client = new SolidClient({ identityManager });
 
