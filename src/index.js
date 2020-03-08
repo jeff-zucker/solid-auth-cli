@@ -54,8 +54,7 @@ async function currentSession(){
     else { return null; }
 }
 async function getCredentials(fn){
-        let home = process.env.HOME || ""
-        fn = fn || path.join( home,".solid-auth-cli-config.json")
+        fn = fn || path.join( homedir,".solid-auth-cli-config.json")
         var creds={};
         if(fs.existsSync(fn))  {
             try {
@@ -78,7 +77,7 @@ async function getCredentials(fn){
 }
 
 var session;
-const homedir = require('os').homedir();
+const homedir = require('os').homedir() || "";
 const settingsFile = path.join(homedir, '.solid-cli.json');
 const identityManager = loadIdentityManager(settingsFile);
 const client = new SolidClient({ identityManager });
