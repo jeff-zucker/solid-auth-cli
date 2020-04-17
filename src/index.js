@@ -38,7 +38,7 @@ async function fetch(url,request){
     request.headers = request.headers || {};
     if( session ) {
          let token = await client.createToken(url, session);
-         saveIdentityManager(identityManager, settingsFile)
+//         saveIdentityManager(identityManager, settingsFile)
          request.credentials = "include";
          request.headers.authorization= `Bearer ${token}`;
     }
@@ -79,21 +79,26 @@ async function getCredentials(fn){
 var session;
 const homedir = require('os').homedir() || "";
 const settingsFile = path.join(homedir, '.solid-cli.json');
-const identityManager = loadIdentityManager(settingsFile);
-const client = new SolidClient({ identityManager });
+const identityManager = new IdentityManager()
+const client = new SolidClient({ identityManager : identityManager });
 
-// Instantiates the identity manager from the given settings file
-function loadIdentityManager(settingsFile) {
-  let settingsJson;
-  try { settingsJson = fs.readFileSync(settingsFile, 'utf8'); }
-  catch (error) { settingsJson = '{}'; }
-  return IdentityManager.fromJSON(settingsJson);
-}
 
-// Saves the identity manager into a settings file
-function saveIdentityManager(identityManager, settingsFile) {
-  const settingsJSON = identityManager.toJSON();
-  fs.writeFileSync(settingsFile, settingsJSON);
+// OVER-RIDE SOLID-CLI METHOD TO RESOVE BUG
+// Fake redirect URL
+const redirectUrl = 'http://example.org/';
+client.createSession =  async function(relyingParty, credentials) {
+  // Obtain the authorization URL
+  const authData = {};
+  const authUrl = await relyingParty.createRequest(
+    { redirect_uri: redirectUrl, scope: ['openid'] }, authData
+  )
+  // Perform the login
+  const loginParams = await this.getLoginParams(authUrl);
+  const accessUrl = await this.performLogin(
+    loginParams.loginUrl, loginParams, credentials
+  )
+  const session = await relyingParty.validateResponse(accessUrl, authData);
+  return session;
 }
 
 async function login( cfg ) {
