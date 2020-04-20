@@ -60,9 +60,11 @@ async function run(scheme){
   let cfg = await getConfig(scheme)
   let res
 
-  /* CREATE TEST FOLDER ON APP */
+  try { res = await postFolder("app://","ls") } catch{}
+  try { res = await postFolder("app://ls/","test-folder") } catch{}
+  try { res = await postFolder("file://"+process.cwd()+"/test-folder") }catch{}
+
   if(scheme==="app:") {
-    res = await postFolder("app://ls/","test-folder")
     cfg.base += "/";
   }
 
