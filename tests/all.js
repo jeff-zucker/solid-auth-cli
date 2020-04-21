@@ -1,13 +1,13 @@
 const auth  = require("../")
 const fetch = auth.fetch // OR solid-file-client.fetch OR solid-rest.fetch
 
-let [tests,fails,passes,res] = [0,0,0]
+let [tests,fails,passes,res,allfails] = [0,0,0,0]
 
 async function main(){
   await run("app:")
   await run("file:")
   // await run("https:")
-  if(fails>0){
+  if(allfails>0){
     process.exit(1)
   }
   else{
@@ -141,8 +141,8 @@ async function run(scheme){
     res = await DELETE( cfg.base )
     ok("200 delete container",res.status==200,res)
   }
-
   console.log(`${passes}/${tests} tests passed, ${fails} failed\n`)
+  allfails = allfails + fails
 }
 /* =========================================================== */
 /* REST METHODS                                                */
