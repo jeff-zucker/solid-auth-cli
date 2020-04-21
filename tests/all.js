@@ -6,7 +6,13 @@ let [tests,fails,passes,res] = [0,0,0]
 async function main(){
   await run("app:")
   await run("file:")
-  await run("https:")
+  // await run("https:")
+  if(fails>0){
+    process.exit(1)
+  }
+  else{
+    process.exit(0)
+  }
 }
 main()
 
@@ -60,9 +66,8 @@ async function run(scheme){
   let cfg = await getConfig(scheme)
   let res
 
-  try { res = await postFolder("app://","ls") } catch{}
-  try { res = await postFolder("app://ls/","test-folder") } catch{}
-  try { res = await postFolder("file://"+process.cwd()+"/test-folder") }catch{}
+  try { res = await PUT("app://ls/test-folder/dummy.txt") } catch{}
+  try { res = await PUT("file://"+process.cwd()+"/test-folder/dummy.txt") }catch{}
 
   if(scheme==="app:") {
     cfg.base += "/";
@@ -124,6 +129,8 @@ async function run(scheme){
   res = await DELETE( cfg.folder1 )
   ok("409 delete container, not empty",res.status==409,res)
 
+  res = await DELETE( cfg.base+'/dummy.txt' )
+  res = await DELETE( cfg.base+'dummy.txt' )
   res = await DELETE( cfg.file1 )
   res = await DELETE( cfg.deepR )
   ok("200 delete resource",res.status==200,res)
@@ -131,11 +138,11 @@ async function run(scheme){
   if(scheme != "https:"){
     res = await DELETE( cfg.folder2 )
     res = await DELETE( cfg.folder1 )
+    res = await DELETE( cfg.base )
     ok("200 delete container",res.status==200,res)
   }
 
   console.log(`${passes}/${tests} tests passed, ${fails} failed\n`)
-
 }
 /* =========================================================== */
 /* REST METHODS                                                */
