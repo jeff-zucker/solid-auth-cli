@@ -1,7 +1,8 @@
 const auth  = require("../")
 const fetch = auth.fetch // OR solid-file-client.fetch OR solid-rest.fetch
 
-let [tests,fails,passes,res,allfails] = [0,0,0,0]
+let [tests,fails,passes,res] = [0,0,0]
+let allfails = 0
 
 async function main(){
   await run("app:")
