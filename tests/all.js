@@ -8,14 +8,9 @@ async function main(){
   await run("app:")
   await run("file:")
   // await run("https:")
-  if(allfails>0){
-    process.exit(1)
-  }
-  else{
-    process.exit(0)
-  }
+  expect(allfails).toEqual(0)
 }
-main()
+it('all', main)
 
 async function getConfig(scheme){
   if(scheme==="app:")       scheme = "app://ls"
