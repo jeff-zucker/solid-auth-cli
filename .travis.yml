@@ -6,4 +6,4 @@ os:
   - osx
   - windows
 script:
-  - node tests/all.js
+  - npm test
